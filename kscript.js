@@ -1,26 +1,27 @@
 const fs = require('fs');
 const path = require('path');
 
+const vars = {};
+
 function run(code){
-    const cmd = code[0]
+    const cmd = code[0];
     if(cmd == "log"){
-        console.log(code[1]);
+        console.log(vars[code[1]] !== undefined ? vars[code[1]] : code[1]);
+    }
+    if(cmd == "set"){
+        vars[code[1]] = code[2];
     }
     if(cmd == "while"){
-        while(code[1] != code[2]){
-            if(code[1] == code[2]){
-                break;
-            }
+        while(vars[code[1]] != code[2]){
             run(code[3]);
-            code[1]++;
+            vars[code[1]]++;
         }
     }
     if (cmd == "if") {
-        if(code[1] == code[2]){
+        if(vars[code[1]] == code[2]){
             run(code[3]);
         }
     }
-
 }
 
 const file = process.argv[2];
